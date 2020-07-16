@@ -7,7 +7,7 @@ services:
     image: postgres
     restart: always
     volumes:
-      - database:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
@@ -23,7 +23,7 @@ services:
     ports:
       - 9010:80
     volumes:
-      - nextcloud:/var/www/html
+      - ./nextcloud:/var/www/html
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -40,6 +40,14 @@ services:
       - postgres_password
       - postgres_user
 
-volumes:
-  db:
-  nextcloud:
+secrets:
+  nextcloud_admin_password:
+    file: ./nextcloud_admin_password.txt # put admin password to this file
+  nextcloud_admin_user:
+    file: ./nextcloud_admin_user.txt # put admin username to this file
+  postgres_db:
+    file: ./postgres_db.txt # put postgresql db name to this file
+  postgres_password:
+    file: ./postgres_password.txt # put postgresql password to this file
+  postgres_user:
+    file: ./postgres_user.txt # put postgresql username to this file
