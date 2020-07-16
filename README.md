@@ -30,3 +30,25 @@ $ ./setup_secrets.sh rm
 
 $ ./setup_secrets.sh
 ```
+
+## Build docker compose
+
+Use these commands to run the app.
+
+```console
+$ docker-compose build
+$ docker-compose up -d
+```
+
+## Add your hostname to nextcloud's config
+
+Modify `./nextcloud/config/config.php`, add your hostname to `trusted_domains`.
+
+```php
+  'trusted_domains' =>
+  array (
+    0 => 'localhost',
+    1 => '10.0.0.11', // local ip addr
+    2 => 'hostname', // other hostname
+  ),
+```
