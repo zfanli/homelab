@@ -13,7 +13,6 @@ keys[7]='NEXTCLOUD_TRUSTED_DOMAINS'     ; vals[7]='127.0.0.1'
 keys[8]='OVERWRITEHOST'                 ; vals[8]='10.0.0.1:80'
 keys[9]='OVERWRITEPROTOCOL'             ; vals[9]='https'
 keys[10]='OVERWRITEWEBROOT'             ; vals[10]='/'
-keys[11]='NEXTCLOUD_TRUSTED_DOMAINS'    ; vals[11]=''
 
 env="# .env file"
 
