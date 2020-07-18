@@ -153,6 +153,15 @@ http {
 }
 ```
 
+Nginx also has a limit of 1G on downloading, this is set by `proxy_buffering`, you can either disable `proxy_buffering` or increase `proxy_max_temp_file_size` to overcome the limit. (To me, just disabled `proxy_buffering` because nextcloud server is deployed in the same machine with nginx)
+
+```conf
+http {
+    ...
+    proxy_buffering off;
+}
+```
+
 ## (Optional) Increase timeout settings
 
 > Line number may change because of version update.
