@@ -141,3 +141,13 @@ $ docker run \
   --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
   --env-file .env --network lab-net nextcloud
 ```
+
+## (Optional) Increase timeout settings
+
+> Line number may change because of version update.
+
+Change line 404 in `3rdparty/guzzlehttp/guzzle/src/Handler/CurlFactory.php`, increase 1000 to 10000
+
+In `lib/private/App/AppStore/Fetcher/Fetcher.php`, on line 98 change the timeout from 10 to 30 or 90
+
+In `lib/private/Http/Client.php`,on line 66 change the timeout from 30 to 90
