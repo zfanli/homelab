@@ -65,7 +65,7 @@ The absolute web path of the proxy to the Nextcloud folder.
 
 ## Setup network for postgres and nextcloud
 
-Create a new network for communication between postgres and nextcloud.
+Create a new network for postgres and nextcloud to communicate with each other.
 
 ```console
 $ docker network create --driver bridge \
@@ -74,7 +74,7 @@ $ docker network create --driver bridge \
 
 You can use `docker network connect` command to connect an existing container to specified network.
 
-For example, the code as shown bellow connect the nginx container to `lab-net` network.
+For example, the command below connect the nginx container to `lab-net` network.
 
 ```console
 $ docker network connect lab-net nginx
