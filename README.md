@@ -52,6 +52,8 @@ Reverse proxy config. The hostname of the proxy. You can also specify a port.
 
 The protocol of the proxy. You can choose between the two options http and https.
 
+> If you're using reverse proxy to bypass traffic to nextcloud that deployed in the internal network, you should set it to meet the protocol of the public domain. For example if you access your cloud by `https://your.domain.xyz`, set `OVERWRITEPROTOCOL` to `https` to let nextcloud know which protocol it should use, otherwise nextcloud will always to set protocol to `http`.
+
 `OVERWRITEWEBROOT`
 
 The absolute web path of the proxy to the Nextcloud folder.
