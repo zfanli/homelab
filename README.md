@@ -142,6 +142,17 @@ $ docker run \
   --env-file .env --network lab-net nextcloud
 ```
 
+## Max upload limit of nginx
+
+By default, nginx has a limit of 1MB on file uploads. You can configure it by adding this line in **http block**. Restart nginx container to apply the config.
+
+```conf
+http {
+    ...
+    client_max_body_size 100M;
+}
+```
+
 ## (Optional) Increase timeout settings
 
 > Line number may change because of version update.
