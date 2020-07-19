@@ -1,6 +1,6 @@
 # homelab-nextcloud-config
 
-Configuration of nextcloud for running on my homelab. Use postgres sql as data backend.
+Configure nextcloud to my homelab. Use postgres as data backend.
 
 ## Setup .env file
 
