@@ -1,26 +1,26 @@
-# homelab
+# homelab 🏠🛠🔬
 
 Setup scripts and guides for my homelab.
 
 ## Purpose
 
-My homelab is for study and storage use.
+My homelab is for study📚 and storage💾 use.
 
 **Components**
 
-| Components | Description                |
-| ---------- | -------------------------- |
-| docker     | \*Infrastructure           |
-| nginx      | Traffic reverse proxy      |
-| nextcloud  | Personal cloud storage app |
-| postgres   | Database used by nextcloud |
+| Components | Description                  |
+| ---------- | ---------------------------- |
+| docker     | \*🍀Infrastructure           |
+| nginx      | 🚦Traffic reverse proxy      |
+| nextcloud  | ☁︎Personal cloud storage app |
+| postgres   | ⚙️Database used by nextcloud |
 
-## Table of contents
+## Table of contents 📖
 
-- [homelab](#homelab)
+- [homelab 🏠🛠🔬](#homelab-)
   - [Purpose](#purpose)
-  - [Table of contents](#table-of-contents)
-  - [Configure Nextcloud](#configure-nextcloud)
+  - [Table of contents 📖](#table-of-contents-)
+  - [Configure Nextcloud ☁️](#configure-nextcloud-️)
     - [Setup .env file](#setup-env-file)
     - [Setup network for postgres and nextcloud](#setup-network-for-postgres-and-nextcloud)
     - [Make a postgres container first](#make-a-postgres-container-first)
@@ -28,7 +28,7 @@ My homelab is for study and storage use.
     - [Max upload limit of nginx](#max-upload-limit-of-nginx)
     - [(Optional) Increase timeout settings](#optional-increase-timeout-settings)
 
-## Configure Nextcloud
+## Configure Nextcloud ☁️
 
 Configure nextcloud on my homelab. Use postgres as data backend.
 
@@ -46,51 +46,51 @@ Run this script to initialize a .env file.
 $ ./setup_env.sh
 ```
 
-You'll be prompted to input some environment variables.
+You'll be prompted to set values of these environment variables. A default value maybe provided for some items and you can leave empty to use it.
 
-`NEXTCLOUD_ADMIN_USER`
+- `NEXTCLOUD_ADMIN_USER`
 
 The admin username of nextcloud.
 
-`NEXTCLOUD_ADMIN_PASSWORD`
+- `NEXTCLOUD_ADMIN_PASSWORD`
 
 The password of admin user.
 
-`POSTGRES_HOST`
+- `POSTGRES_HOST`
 
 The hostname of postgres sql. Recommend to specify the container's name.
 
-`POSTGRES_USER`
+- `POSTGRES_USER`
 
 The username of postgres.
 
-`POSTGRES_PASSWORD`
+- `POSTGRES_PASSWORD`
 
 The password of postgres user.
 
-`POSTGRES_DB`
+- `POSTGRES_DB`
 
 The name of database.
 
-`TRUSTED_PROXIES`
+- `TRUSTED_PROXIES`
 
 Only set if you're using reverse proxy. Specify the trusted proxies to permit traffic bypass. Use space to separate each proxy.
 
-`NEXTCLOUD_TRUSTED_DOMAINS`
+- `NEXTCLOUD_TRUSTED_DOMAINS`
 
 Specify the trusted domain to host nextcloud. Use space to separate each domain.
 
-`OVERWRITEHOST`
+- `OVERWRITEHOST`
 
 Reverse proxy config. The hostname of the proxy. You can also specify a port.
 
-`OVERWRITEPROTOCOL`
+- `OVERWRITEPROTOCOL`
 
 The protocol of the proxy. You can choose between the two options http and https.
 
 > If you're using reverse proxy to bypass traffic to nextcloud that deployed in the internal network, you should set it to meet the protocol of the public domain. For example if you access your cloud by `https://your.domain.xyz`, set `OVERWRITEPROTOCOL` to `https` to let nextcloud know which protocol it should use, otherwise nextcloud will always to set protocol to `http`.
 
-`OVERWRITEWEBROOT`
+- `OVERWRITEWEBROOT`
 
 The absolute web path of the proxy to the Nextcloud folder.
 
