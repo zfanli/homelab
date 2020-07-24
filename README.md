@@ -1,8 +1,44 @@
-# homelab-nextcloud-config
+# homelab
 
-Configure nextcloud to my homelab. Use postgres as data backend.
+Setup scripts and guides for my homelab.
 
-## Setup .env file
+## Purpose
+
+My homelab is for study and storage use.
+
+**Components**
+
+| Components | Description                |
+| ---------- | -------------------------- |
+| docker     | \*Infrastructure           |
+| nginx      | Traffic reverse proxy      |
+| nextcloud  | Personal cloud storage app |
+| postgres   | Database used by nextcloud |
+
+## Table of contents
+
+- [homelab](#homelab)
+  - [Purpose](#purpose)
+  - [Table of contents](#table-of-contents)
+  - [Configure Nextcloud](#configure-nextcloud)
+    - [Setup .env file](#setup-env-file)
+    - [Setup network for postgres and nextcloud](#setup-network-for-postgres-and-nextcloud)
+    - [Make a postgres container first](#make-a-postgres-container-first)
+    - [Make nextcloud container](#make-nextcloud-container)
+    - [Max upload limit of nginx](#max-upload-limit-of-nginx)
+    - [(Optional) Increase timeout settings](#optional-increase-timeout-settings)
+
+## Configure Nextcloud
+
+Configure nextcloud on my homelab. Use postgres as data backend.
+
+> First enter the work directory `nextcloud`, then follow the instructions below.
+>
+> ```
+> $ cd nextcloud
+> ```
+
+### Setup .env file
 
 Run this script to initialize a .env file.
 
@@ -63,7 +99,7 @@ The absolute web path of the proxy to the Nextcloud folder.
 - https://hub.docker.com/_/nextcloud/
 - https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html
 
-## Setup network for postgres and nextcloud
+### Setup network for postgres and nextcloud
 
 Create a new network for postgres and nextcloud to communicate with each other.
 
@@ -87,7 +123,7 @@ $ docker network connect lab-net nginx
 > $ firewall-cmd --reload
 > ```
 
-## Make a postgres container first
+### Make a postgres container first
 
 Initialization of nextcloud needs postgres to be ready, so we should first create the postgres container and make sure it's ready to be used.
 
@@ -116,7 +152,7 @@ $ docker logs postgres
 2020-07-17 14:52:08.129 UTC [1] LOG:  database system is ready to accept connections
 ```
 
-## Make nextcloud container
+### Make nextcloud container
 
 Make sure the mount directory exists. Create one if not.
 
@@ -142,7 +178,7 @@ $ docker run \
   --env-file .env --network lab-net nextcloud
 ```
 
-## Max upload limit of nginx
+### Max upload limit of nginx
 
 By default, nginx has a limit of 1MB on file uploads. You can configure it by adding this line in **http block**. Restart nginx container to apply the config.
 
@@ -162,12 +198,12 @@ http {
 }
 ```
 
-## (Optional) Increase timeout settings
+### (Optional) Increase timeout settings
 
-> Line number may change because of version update.
+Line number may change because of version update. Copied from network.
 
-Change line 404 in `3rdparty/guzzlehttp/guzzle/src/Handler/CurlFactory.php`, increase 1000 to 10000
-
-In `lib/private/App/AppStore/Fetcher/Fetcher.php`, on line 98 change the timeout from 10 to 30 or 90
-
-In `lib/private/Http/Client.php`,on line 66 change the timeout from 30 to 90
+> Change line 404 in `3rdparty/guzzlehttp/guzzle/src/Handler/CurlFactory.php`, increase 1000 to 10000.
+>
+> In `lib/private/App/AppStore/Fetcher/Fetcher.php`, on line 98 change the timeout from 10 to 30 or 90.
+>
+> In `lib/private/Http/Client.php`,on line 66 change the timeout from 30 to 90.
