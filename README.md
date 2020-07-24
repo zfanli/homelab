@@ -25,6 +25,7 @@ My homelab is for study📚 and storage💾 use.
     - [Setup network for postgres and nextcloud](#setup-network-for-postgres-and-nextcloud)
     - [Make a postgres container first](#make-a-postgres-container-first)
     - [Make nextcloud container](#make-nextcloud-container)
+    - [Version update](#version-update)
     - [Max upload limit of nginx](#max-upload-limit-of-nginx)
     - [(Optional) Increase timeout settings](#optional-increase-timeout-settings)
 
@@ -34,7 +35,7 @@ Configure nextcloud on my homelab. Use postgres as data backend.
 
 > First enter the work directory `nextcloud`, then follow the instructions below.
 >
-> ```
+> ```console
 > $ cd nextcloud
 > ```
 
@@ -176,6 +177,33 @@ $ docker run \
   --name nextcloud --detach=true -it --restart=always \
   --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
   --env-file .env --network lab-net nextcloud
+```
+
+### Version update
+
+Maybe it is more convenience that use docker-compose to update nextcloud.
+
+> Command `docker-compose up -d` will update image automatically, looks convenience but there has a problem while initializing, the nextcloud container does not wait for postgres to be ready, it means the nextcloud cannot be initialized with postgres expectedly.
+>
+> Although it doesn't cause any problem, you can still initialize the nextcloud manually with postgres, it's totally up to yourself. But to me, I choose to not use docker-compose.
+
+To update the nextcloud container, first update the image, remove the old container and then create a new container based on the existing data.
+
+```console
+$ docker pull nextcloud
+$ docker rm -f nextcloud
+$ docker run \
+  --name nextcloud --detach=true -it --restart=always \
+  --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
+  --env-file .env --network lab-net nextcloud
+```
+
+After the new container is created, wait a few seconds and then it should be ready to use. You can check the version in the settings -> overview page.
+
+And check the logs if anything happened unexpectedly.
+
+```console
+$ docker logs -f nextcloud
 ```
 
 ### Max upload limit of nginx
