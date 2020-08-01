@@ -3,11 +3,18 @@
         "OVERWRITEHOST",
         "OVERWRITEPROTOCOL",
         "OVERWRITEWEBROOT",
+        "childlogdir",
         "homelab",
+        "logfile",
+        "loglevel",
+        "maxbytes",
         "mkdir",
         "nextcloud",
         "nextcloud's",
+        "nodaemon",
+        "pidfile",
         "postgres",
-        "postgresql"
+        "postgresql",
+        "supervisord"
     ]
 }

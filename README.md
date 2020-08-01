@@ -24,6 +24,7 @@ My homelab is for study📚 and storage💾 use.
     - [Setup .env file](#setup-env-file)
     - [Setup network for postgres and nextcloud](#setup-network-for-postgres-and-nextcloud)
     - [Make a postgres container first](#make-a-postgres-container-first)
+    - [Build nextcloud image](#build-nextcloud-image)
     - [Make nextcloud container](#make-nextcloud-container)
     - [Version update](#version-update)
     - [Max upload limit of nginx](#max-upload-limit-of-nginx)
@@ -153,6 +154,75 @@ $ docker logs postgres
 2020-07-17 14:52:08.129 UTC [1] LOG:  database system is ready to accept connections
 ```
 
+### Build nextcloud image
+
+The nextcloud official image does not include `cron` to scheduling background jobs.
+
+The nextcloud will use AJAX to call background jobs by default, but it is not much reliable.
+
+It's recommended to use `cron` as a scheduler to call background jobs, we can include it by build our own image based on the official one.
+
+Create a Dockerfile and copy the content shown below into it.
+
+> CDN setup is optional, you can delete this line if the speed of downloading from the origin source is acceptable to you.
+
+Follow the instruction provided by official doc, what we're doing with the dockerfile is:
+
+- install supervisord to run nextcloud and cron as two separate processes inside the container
+- copy `supervisord.conf` into the container to configure supervisord
+- use a different command to start the container (by set `NEXTCLOUD_UPDATE=1`)
+
+```dockerfile
+FROM nextcloud:apache
+
+# setup cdn for speed up download
+RUN sed -i 's#http://deb.debian.org#https://mirrors.163.com#g' /etc/apt/sources.listtou
+
+RUN apt-get update \
+    && apt-get install -y supervisor \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir /var/log/supervisord /var/run/supervisord
+
+COPY supervisord.conf /
+ENV NEXTCLOUD_UPDATE=1
+CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
+```
+
+There is the `supervisord.conf` copied from the example of official doc.
+
+```ini
+[supervisord]
+nodaemon=true
+logfile=/var/log/supervisord/supervisord.log
+pidfile=/var/run/supervisord/supervisord.pid
+childlogdir=/var/log/supervisord/
+logfile_maxbytes=50MB                           ; maximum size of logfile before rotation
+logfile_backups=10                              ; number of backed up logfiles
+loglevel=error
+
+[program:apache2]
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+command=apache2-foreground
+
+[program:cron]
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+command=/cron.sh
+```
+
+Use this command to build our own image.
+
+```console
+$ docker build --tag nextcloud_cron .
+```
+
+OK, the image build is done.
+
 ### Make nextcloud container
 
 Make sure the mount directory exists. Create one if not.
@@ -170,13 +240,13 @@ $ docker run \
   --name nextcloud --detach=true -it --restart=always \
   --publish 8080:80 \
   --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
-  --env-file .env --network lab-net nextcloud
+  --env-file .env --network lab-net nextcloud_cron
 
 # or omit publish port
 $ docker run \
   --name nextcloud --detach=true -it --restart=always \
   --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
-  --env-file .env --network lab-net nextcloud
+  --env-file .env --network lab-net nextcloud_cron
 ```
 
 ### Version update
@@ -195,7 +265,7 @@ $ docker rm -f nextcloud
 $ docker run \
   --name nextcloud --detach=true -it --restart=always \
   --mount type=bind,source="$(pwd)"/nextcloud,target=/var/www/html \
-  --env-file .env --network lab-net nextcloud
+  --env-file .env --network lab-net nextcloud_cron
 ```
 
 After the new container is created, wait a few seconds and then it should be ready to use. You can check the version in the settings -> overview page.
