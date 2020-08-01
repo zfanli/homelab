@@ -249,6 +249,10 @@ $ docker run \
   --env-file .env --network lab-net nextcloud_cron
 ```
 
+> We've configured the nextcloud container to use cron to scheduling background jobs because it is more reliable than AJAX or WebCron.
+>
+> After starting the nextcloud container, check the `Settings` -> `Basic settings` page, choose the `cron` at the background jobs section.
+
 ### Version update
 
 Maybe it is more convenience that use docker-compose to update nextcloud.
