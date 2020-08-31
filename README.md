@@ -29,6 +29,7 @@ My homelab is for study📚 and storage💾 use.
     - [Version update](#version-update)
     - [Max upload limit of nginx](#max-upload-limit-of-nginx)
     - [(Optional) Increase timeout settings](#optional-increase-timeout-settings)
+    - [File locked and cannot be deleted](#file-locked-and-cannot-be-deleted)
 
 ## Configure Nextcloud ☁️
 
@@ -309,3 +310,11 @@ Line number may change because of version update. Copied from network.
 > In `lib/private/App/AppStore/Fetcher/Fetcher.php`, on line 98 change the timeout from 10 to 30 or 90.
 >
 > In `lib/private/Http/Client.php`,on line 66 change the timeout from 30 to 90.
+
+### File locked and cannot be deleted
+
+Use the command to fix this problem.
+
+```console
+$ sudo -u www-data php occ files:scan --all
+```
